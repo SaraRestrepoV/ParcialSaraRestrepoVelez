@@ -76,7 +76,7 @@ namespace ParcialSaraRestrepoVelez.Controllers
         {
             try
             {
-                if (id != ticket.Id) return NotFound("ticket not found");
+                if (id != ticket.Id) return NotFound("Boleta no válida");
 
                 ticket.ModifiedDate = DateTime.Now;
                 ticket.UseDate = DateTime.Now;

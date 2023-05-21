@@ -2,8 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\ParcialSaraRestrepoVelez\DAL\Entities\Entity.cs" Link="Models\Entity.cs" />
+    <Compile Include="..\..\ParcialSaraRestrepoVelez\DAL\Entities\Ticket.cs" Link="Models\Ticket.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
 
 </Project>
