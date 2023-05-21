@@ -20,10 +20,11 @@ namespace ParcialSaraRestrepoVelez.DAL
         {
            if(!_context.Tickets.Any())
             {
-                _context.Tickets.Add(new Ticket { EntranceGate = "Sur", IsUsed = false, CreatedDate = DateTime.Now });
-                _context.Tickets.Add(new Ticket { EntranceGate = "Norte", IsUsed = false, CreatedDate = DateTime.Now });
-                _context.Tickets.Add(new Ticket { EntranceGate = "Oriental", IsUsed = false, CreatedDate = DateTime.Now });
-                _context.Tickets.Add(new Ticket { EntranceGate = "Occidental", IsUsed = false, CreatedDate = DateTime.Now });
+                for(int i = 0; i <= 100; i++)
+                {
+                    _context.Tickets.Add(new Ticket {IsUsed = false, CreatedDate = DateTime.Now });
+                }
+                              
             }
 
             await _context.SaveChangesAsync();
