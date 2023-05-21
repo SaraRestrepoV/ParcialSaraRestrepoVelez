@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ParcialSaraRestrepoVelez.DAL.Entities;
+using System.Diagnostics.Metrics;
 
 namespace ParcialSaraRestrepoVelez.DAL
 {
@@ -9,10 +11,12 @@ namespace ParcialSaraRestrepoVelez.DAL
         { 
         
         }
+        public DbSet<Ticket> Tickets { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Ticket>().HasIndex(c => c.Id).IsUnique();
         }
     }
 }
