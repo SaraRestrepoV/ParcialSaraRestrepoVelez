@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using ParcialSaraRestrepoVelez.DAL;
 using ParcialSaraRestrepoVelez.DAL.Entities;
-using System.Data;
 using System.Data.Entity;
 using DbUpdateException = Microsoft.EntityFrameworkCore.DbUpdateException;
 
@@ -22,25 +22,26 @@ namespace ParcialSaraRestrepoVelez.Controllers
 
         [HttpGet, ActionName("Get")]
         [Route("Get")]
-        public async Task<ActionResult<IEnumerable<Ticket>>> GetTickets()
+        public async Task<ActionResult<IEnumerable<Ticket>>> GetTicket()
         {
-            var tickets = await _context.Tickets.ToListAsync();
+            var ticket = _context.Tickets.ToList(); 
 
-            if (tickets == null) return NotFound();
+            if (ticket == null) return NotFound();
 
-            return tickets;
+            return ticket;
         }
 
         [HttpGet, ActionName("Get")]
         [Route("Get/{id}")]
-        public async Task<ActionResult<Ticket>> GetCategoryById(Guid? id)
+        public async Task<ActionResult<Ticket>> GetTicketById(Guid? id)
         {
-            var ticket = await _context.Tickets.FirstOrDefaultAsync(c => c.Id == id);
+            var ticket = _context.Tickets.FirstOrDefault(c => c.Id == id);
 
             if (ticket == null) return NotFound();
 
             return Ok(ticket);
         }
+
 
         [HttpPost, ActionName("Create")]
         [Route("Create")]
@@ -101,7 +102,7 @@ namespace ParcialSaraRestrepoVelez.Controllers
         public async Task<ActionResult> DeleteTicket(Guid? id)
         {
             if (_context.Tickets == null) return Problem("Entity set 'DataBaseContext.Tickets' is null.");
-            var ticket = await _context.Tickets.FirstOrDefaultAsync(c => c.Id == id);
+            var ticket = _context.Tickets.FirstOrDefault(c => c.Id == id);
 
             if (ticket == null) return NotFound("Category not found");
 
