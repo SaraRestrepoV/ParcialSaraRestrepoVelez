@@ -61,6 +61,24 @@ namespace WebPagesAPI.Controllers
             await _httpClient.CreateClient().PutAsJsonAsync(url, ticket);
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Enter(Guid? id)
+        {
+            var url = String.Format("https://localhost:7048/api/Ticket/Get/{0}", id);
+            var json = await _httpClient.CreateClient().GetStringAsync(url);
+            Ticket ticket = JsonConvert.DeserializeObject<Ticket>(json);
+            return View(ticket);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Enter(Guid? id, Ticket ticket)
+        {
+            var url = String.Format("https://localhost:7048/api/Ticket/Edit/{0}", id);
+            await _httpClient.CreateClient().PutAsJsonAsync(url, ticket);
+            return RedirectToAction("Index");
+        }
     }
 
 }
