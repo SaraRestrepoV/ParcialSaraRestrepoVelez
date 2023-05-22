@@ -43,11 +43,32 @@ namespace WebPagesAPI.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetTicket()
+        {
+            return View();        }
+        
+        [HttpPost]
+        public async Task<IActionResult> GetTicket(Guid? id)
+        {
+            try
+            {
+                var url = String.Format("https://localhost:7048/api/Tickets/Get/{0}", id);
+                var json = await _httpClient.CreateClient().GetStringAsync(url);
+                var ticket = JsonConvert.DeserializeObject<Ticket>(json);
+                return RedirectToAction("Edit", ticket);
+            }
+            catch (Exception ex)
+            {
+                return View("Error", ex);
+            }
+
+        }
 
         [HttpGet]
         public async Task<IActionResult> Edit(Guid? id)
         {
-            var url = String.Format("https://localhost:7048/api/Ticket/Get/{0}", id);
+            var url = String.Format("https://localhost:7048/api/Tickets/Get/{0}", id);
             var json = await _httpClient.CreateClient().GetStringAsync(url);
             Ticket ticket = JsonConvert.DeserializeObject<Ticket>(json);
             return View(ticket);
@@ -55,27 +76,9 @@ namespace WebPagesAPI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, Ticket ticket) 
+        public async Task<IActionResult> Edit(Guid? id, Ticket ticket)
         {
-            var url = String.Format("https://localhost:7048/api/Ticket/Edit/{0}", id);
-            await _httpClient.CreateClient().PutAsJsonAsync(url, ticket);
-            return RedirectToAction("Index");
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Enter(Guid? id)
-        {
-            var url = String.Format("https://localhost:7048/api/Ticket/Get/{0}", id);
-            var json = await _httpClient.CreateClient().GetStringAsync(url);
-            Ticket ticket = JsonConvert.DeserializeObject<Ticket>(json);
-            return View(ticket);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Enter(Guid? id, Ticket ticket)
-        {
-            var url = String.Format("https://localhost:7048/api/Ticket/Edit/{0}", id);
+            var url = String.Format("https://localhost:7048/api/Tickets/Edit/{0}", id);
             await _httpClient.CreateClient().PutAsJsonAsync(url, ticket);
             return RedirectToAction("Index");
         }
