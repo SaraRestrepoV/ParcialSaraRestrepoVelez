@@ -1,0 +1,13 @@
+﻿@model ParcialSaraRestrepoVelez.DAL.Entities.Ticket
+
+@{
+    ViewData["Title"] = "Success";
+}
+
+<h1>Felicidades, puede ingresar al concierto</h1>
+
+<p>Puerta de entrada: @Model.EntranceGate</p>
+
+<div class="form-group">
+    <a asp-action="Index" class="btn btn-outline-success">Regresar</a>
+</div>

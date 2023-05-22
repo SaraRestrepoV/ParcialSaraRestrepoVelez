@@ -16,9 +16,7 @@ namespace WebPagesAPI.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var url = "https://localhost:7048/api/Ticket/Get";
-            List<Ticket> Tickets = JsonConvert.DeserializeObject<List<Ticket>>(await _httpClient.CreateClient().GetStringAsync(url));
-            return View(Tickets);
+            return View();
         }
 
         [HttpGet]
@@ -69,8 +67,13 @@ namespace WebPagesAPI.Controllers
             }
             catch
             {
-                return RedirectToAction("TicketNotFound");
+                return RedirectToAction("NotFound");
             }
+        }
+
+        public async Task<IActionResult> NotFound()
+        {
+            return View();
         }
 
 
@@ -88,9 +91,9 @@ namespace WebPagesAPI.Controllers
                 return View("Error", ex);
             }
         }
-        
 
-            [HttpPost]
+
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid? id, Ticket ticket)
         {
@@ -98,7 +101,7 @@ namespace WebPagesAPI.Controllers
             {
                 var url = String.Format("https://localhost:7048/api/Ticket/Edit/{0}", id);
                 await _httpClient.CreateClient().PutAsJsonAsync(url, ticket);
-                return RedirectToAction("Index");
+                return RedirectToAction("Success", ticket);
             }
             catch (Exception ex)
             {
@@ -106,6 +109,10 @@ namespace WebPagesAPI.Controllers
             }
         }
 
+        public async Task<IActionResult> Success(Ticket ticket)
+        {
+            return View(ticket);
+        }
     }
 
 }
