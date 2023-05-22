@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ParcialSaraRestrepoVelez.DAL.Entities;
-using System.Configuration;
-using static System.Net.WebRequestMethods;
 
 namespace WebPagesAPI.Controllers
 {
@@ -43,6 +41,25 @@ namespace WebPagesAPI.Controllers
             {
                 return View("Error", ex);
             }
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid? id)
+        {
+            var url = String.Format("https://localhost:7048/api/Ticket/Get/{0}", id);
+            var json = await _httpClient.CreateClient().GetStringAsync(url);
+            Ticket ticket = JsonConvert.DeserializeObject<Ticket>(json);
+            return View(ticket);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid? id, Ticket ticket) 
+        {
+            var url = String.Format("https://localhost:7048/api/Ticket/Edit/{0}", id);
+            await _httpClient.CreateClient().PutAsJsonAsync(url, ticket);
+            return RedirectToAction("Index");
         }
     }
 
