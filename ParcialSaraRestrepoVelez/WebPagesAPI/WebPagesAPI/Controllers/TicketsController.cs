@@ -14,9 +14,14 @@ namespace WebPagesAPI.Controllers
         public async Task<IActionResult> Index()
         {
             var url = "https://localhost:7048/api/Ticket/Get";
-            var json = await _httpClient.CreateClient().GetStringAsync(url);
-            List<Ticket> Tickets = JsonConvert.DeserializeObject<List<Ticket>>(json);
+            List<Ticket> Tickets = JsonConvert.DeserializeObject<List<Ticket>>(await _httpClient.CreateClient().GetStringAsync(url));
             return View(Tickets);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
         }
     }
 
