@@ -46,42 +46,66 @@ namespace WebPagesAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTicket()
         {
-            return View();        }
-        
+            return View();
+        }
+
         [HttpPost]
         public async Task<IActionResult> GetTicket(Guid? id)
         {
             try
             {
-                var url = String.Format("https://localhost:7048/api/Tickets/Get/{0}", id);
+                var url = String.Format("https://localhost:7048/api/Ticket/Get/{0}", id);
                 var json = await _httpClient.CreateClient().GetStringAsync(url);
-                var ticket = JsonConvert.DeserializeObject<Ticket>(json);
-                return RedirectToAction("Edit", ticket);
+                Ticket ticket = JsonConvert.DeserializeObject<Ticket>(json);
+
+                if (ticket.IsUsed == false)
+                {
+                    return RedirectToAction("Edit", ticket.Id);
+                }
+                else
+                {
+                    return View(ticket);
+                }
+            }
+            catch
+            {
+                return RedirectToAction("TicketNotFound");
+            }
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid? id)
+        {
+            try
+            {
+                var url = String.Format("https://localhost:7048/api/Ticket/Get/{0}", id);
+                var json = await _httpClient.CreateClient().GetStringAsync(url);
+                Ticket ticket = JsonConvert.DeserializeObject<Ticket>(json);
+                return View(ticket);
+            } catch (Exception ex)
+            {
+                return View("Error", ex);
+            }
+        }
+        
+
+            [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid? id, Ticket ticket)
+        {
+            try
+            {
+                var url = String.Format("https://localhost:7048/api/Ticket/Edit/{0}", id);
+                await _httpClient.CreateClient().PutAsJsonAsync(url, ticket);
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
                 return View("Error", ex);
             }
-
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Edit(Guid? id)
-        {
-            var url = String.Format("https://localhost:7048/api/Tickets/Get/{0}", id);
-            var json = await _httpClient.CreateClient().GetStringAsync(url);
-            Ticket ticket = JsonConvert.DeserializeObject<Ticket>(json);
-            return View(ticket);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, Ticket ticket)
-        {
-            var url = String.Format("https://localhost:7048/api/Tickets/Edit/{0}", id);
-            await _httpClient.CreateClient().PutAsJsonAsync(url, ticket);
-            return RedirectToAction("Index");
-        }
     }
 
 }
